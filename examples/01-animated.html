@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QBert</title>
+    <link rel="stylesheet" type="text/css" href="../qbert.css">
+    <link rel="stylesheet" type="text/css" href="example.css">
+</head>
+<body>
+    <div style="margin: 1em">
+        <button id="randomize">Randomize all block sizes</button>
+        <label><input id="animated" type="checkbox"> animated</label>
+        <p>Click a single block to randomize its size</p>
+    </div>
+    <ul id="qbert-example">
+        <li class="blue" data-block-width="2" data-block-height="2">1</li>
+        <li class="light-gray" data-block-width="1" data-block-height="1">2</li>
+        <li class="gray" data-block-width="1" data-block-height="1">3</li>
+        <li class="red" data-block-width="3" data-block-height="2">4</li>
+        <li class="dark-blue" data-block-width="1" data-block-height="2">5</li>
+        <li class="gray" data-block-width="1" data-block-height="1">6</li>
+        <li class="light-gray" data-block-width="1" data-block-height="1">7</li>
+        <li class="dark-blue" data-block-width="2" data-block-height="1">8</li>
+        <li class="gray" data-block-width="1" data-block-height="1">9</li>
+        <li class="light-gray" data-block-width="1" data-block-height="1">10</li>
+        <li class="gray" data-block-width="1" data-block-height="1">11</li>
+        <li class="dark-blue" data-block-width="2" data-block-height="1">12</li>
+        <li class="light-gray" data-block-width="1" data-block-height="1">13</li>
+    </ul>
+    <script src="../qbert.js"></script>
+    <script>
+        var container = qbert('#qbert-example'),
+            randomize_block = function (block)
+            {
+                var width = Math.floor((Math.random() * 3) + 1),
+                    height = Math.floor((Math.random() * 3) + 1)
+                        
+                    block.set_size(width, height)
+            },
+            randomize = function ()
+            {
+                container.blocks.map(randomize_block)
+                container.update()
+            }
+        
+        document.getElementById('randomize').onclick = randomize
+        
+        document.getElementById('animated').onchange = function ()
+        {
+            container.set_animated(this.checked)
+        }
+        
+        container.blocks.map(function (block)
+        {
+            block.element.onclick = function ()
+            {
+                randomize_block(block)
+                container.update()
+            }
+        })
+    </script>
+</body>
+</html>
