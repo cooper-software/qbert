@@ -1,0 +1,35 @@
+html, body
+{
+    padding: 0;
+    margin: 0;
+}
+
+body
+{
+    font-family: sans-serif;
+}
+
+.blue
+{
+    background-color: #2C97DE;
+}
+
+.dark-blue
+{
+    background-color: #33485F;
+}
+
+.red
+{
+    background-color: #DA4453;
+}
+
+.gray
+{
+    background-color: #555;
+}
+
+.light-gray
+{
+    background-color: #ccc;
+}
