@@ -8,7 +8,7 @@
 <body>
     <div style="margin: 1em">
         <button id="randomize">Randomize all block sizes</button>
-        <label><input id="animated" type="checkbox"> animated</label>
+        <label><input id="animated" type="checkbox" checked="true"> animated</label>
         <p>Click a single block to randomize its size</p>
     </div>
     <ul id="qbert-example">
@@ -28,7 +28,7 @@
     </ul>
     <script src="../qbert.js"></script>
     <script>
-        var container = qbert('#qbert-example'),
+        var container = qbert('#qbert-example', { animated: true }),
             randomize_block = function (block)
             {
                 var width = Math.floor((Math.random() * 3) + 1),
