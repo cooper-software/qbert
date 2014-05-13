@@ -1,0 +1,3 @@
+# qbert
+
+This is a small javascript library for tile layout in the browser. Tiles are given a width and height where the units are multiples of a base square. Tiles are placed using a modified first-fit algorithm that attempts to fill top-to-bottom, left-to-right along rows of configurable height (also a multiple of the base square). The row is a guide but is not a rigid constraint, allowing the tiles to have tighter coverage.
