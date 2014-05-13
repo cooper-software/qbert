@@ -21,10 +21,22 @@ Block.prototype =
     {
         this.pixel_size = pixel_size
         this.max_width = max_width
+        this.update_size()
+    },
+    
+    update_size: function ()
+    {
         this.width = Math.min(this.max_width, parseInt(this.element.dataset.blockWidth || 1))
         this.height = parseInt(this.element.dataset.blockHeight || 1)
-        this.element.style.width = (pixel_size * this.width) + 'px'
-        this.element.style.height = (pixel_size * this.height) + 'px'
+        this.element.style.width = (this.pixel_size * this.width) + 'px'
+        this.element.style.height = (this.pixel_size * this.height) + 'px'
+    },
+    
+    set_size: function (width, height)
+    {
+        this.element.dataset.blockWidth = width
+        this.element.dataset.blockHeight = height
+        this.update_size()
     }
 }
 
@@ -234,7 +246,9 @@ var Qbert = function (element, options)
 {
     this.options = {
         target_pixel_size: 187,
-        target_row_height: 2
+        target_row_height: 2,
+        animated: false,
+        resize_with_window: true
     }
     
     if (options)
@@ -255,7 +269,12 @@ var Qbert = function (element, options)
     
     this.update_pixel_size()
     
-    window.addEventListener('resize', this.update_pixel_size.bind(this))
+    if (this.options.resize_with_window)
+    {
+        window.addEventListener('resize', this.update_pixel_size.bind(this))
+    }
+    
+    this.set_animated(this.options.animated)
 }
 
 Qbert.prototype = 
@@ -281,6 +300,35 @@ Qbert.prototype =
             var pos = cursor.fit(block.width, block.height)
             block.set_position(pos.x, pos.y)
         })
+    },
+    
+    update: function ()
+    {
+        this.blocks.map(function (block)
+        {
+            block.update_size()
+        })
+        
+        this.layout()
+    },
+    
+    set_animated: function (flag)
+    {
+        if (flag == this.is_animated)
+        {
+            return
+        }
+        
+        this.is_animated = flag
+        
+        if (this.is_animated)
+        {
+            this.element.className += ' qbert-animate'
+        }
+        else
+        {
+            this.element.className = this.element.className.replace(/(\s+)?qbert-animate/g, '')
+        }
     }
 }
 
@@ -295,6 +343,8 @@ window.qbert = function (element_or_selector, options)
             return
         }
     }
+    
+    element_or_selector.className += ' qbert'
     
     return new Qbert(element_or_selector, options)
 }

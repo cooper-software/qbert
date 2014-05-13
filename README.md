@@ -42,9 +42,9 @@ On the page, you'll need a container for qbert to look at as well as some elemen
 
 Let's get some terminology defined before we proceed. In the previous example, the `<ul>` is the *container* and each of the `<li>`s are *blocks*. A block must have a width and height. These are specified in *qbert pixels*. A qbert pixel is a square with a configurable size in actual pixels. All the units in *qbert* are based on the *qbert pixel*.
 
-## Configuration
+## Layout options
 
-You can set two options: the preferred size of the qbert pixel and the prefered height of a row. Both of these will be explained in more detail below. For now, think of the target pixel size as the dimensions of the smallest block. For the row height, imagine all the blocks being placed top-to-bottom until they hit the row height and then filling left-to-right. Here is how you set these options:
+You can set the qbert pixel size and the row height like so:
 
 ```js
 qbert('#my-container', {
@@ -53,6 +53,38 @@ qbert('#my-container', {
 })
 ```
 
-## Stretchiness and tile order
+You might be wondering why the pixel size and row height properties are prefixed with the word *target*. The reason is that they are not rigid constraints. Qbert will do it's best to place the tiles for maximum coverage. To do this it must be able to divide the container's width without a remainder and so it may nudge the pixel size a bit in either direction. It also means that it may not always place tiles so they are in neat rows. However, it will always fill top-to-bottom, left-to-right when possible so that blocks will stay close to their siblings.
 
-You might be wondering why the pixel size and row height properties are prefixed with the word *target*. The reason is that they are not rigid constraints. Qbert will always try to place the tiles for maximum coverage. To do this it must be able to divide the parent element's width without a remainder and so it may nudge the pixel size a bit in either direction. It also means that it may not always place tiles so they are in neat rows. However, it will always fill top-to-bottom, left-to-right when possible so that blocks will stay close to their siblings.
+We think this approach gives a good balance between order, flexibility and beauty but it doesn mean your content needs to be a little flexible.
+
+# Animation
+
+You can animate the transitions between layouts. Just set `animated` to `true` like so:
+
+```js
+qbert('#my-container', { animated: true })
+```
+
+You can also change this setting on an existing qbert container:
+
+```js
+var container = qbert('#my-container', { animated: false })
+/* Some time later */
+container.set_animated(true)
+```
+
+# Triggering updates
+
+By default, containers will update their layouts when the window size changes. This may not be what you want. You can change this setting:
+
+```js
+qbert('#my-container', { resize_with_window: false })
+```
+
+You will need to call `container.update()` any time you want the layout updated (except for the window resize case if that setting is `true`). This includes after changing the width and height properties of a block. Here is an example:
+
+```js
+var container = qbert('#my-container')
+document.getElementById('#some-block').dataset.blockWidth = 3
+container.update() // !! otherwise nothing will happen
+```
