@@ -72,7 +72,7 @@ BlockRow.prototype =
         if (pos)
         {
             this.fill(pos.x, pos.y, width, height)
-                return pos
+            return pos
         }
         else
         {
@@ -145,6 +145,7 @@ BlockRow.prototype =
     
     fill: function (x, y, width, height)
     {
+        console.log(x, y, width, height)
         x = Math.min(x, this.width - 1)
         y = Math.min(y, this.height - 1)
         width = Math.min(width, this.width - x)
@@ -223,6 +224,11 @@ BlockCursor.prototype =
             pos.row = this.rows.length - 1
         }
         
+        return pos
+    },
+    
+    translate_pos: function (pos)
+    {
         return {
             x: pos.x,
             y: this.rows.slice(0, pos.row).reduce(function (a, b) { return a + b.height }, 0) + pos.y
@@ -295,11 +301,16 @@ Qbert.prototype =
     {
         this.columns = Math.floor(window.innerWidth / this.options.target_pixel_size)
         var cursor = new BlockCursor(this.columns, this.options.target_row_height)
-        this.blocks.map(function (block)
-        {
-            var pos = cursor.fit(block.width, block.height)
-            block.set_position(pos.x, pos.y)
-        })
+        this.blocks
+            .map(function (block)
+            {
+                return cursor.fit(block.width, block.height)
+            })
+            .forEach(function (pos, i)
+            {
+                var translated_pos = cursor.translate_pos(pos)
+                this.blocks[i].set_position(translated_pos.x, translated_pos.y)
+            }, this)
     },
     
     update: function ()
