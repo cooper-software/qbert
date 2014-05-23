@@ -145,7 +145,6 @@ BlockRow.prototype =
     
     fill: function (x, y, width, height)
     {
-        console.log(x, y, width, height)
         x = Math.min(x, this.width - 1)
         y = Math.min(y, this.height - 1)
         width = Math.min(width, this.width - x)
